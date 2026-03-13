@@ -1,0 +1,32 @@
+import { Router } from "express";
+import { uploadFileToR2 } from "../../infrastructure/services/R2StorageService";
+import authRoutes from "../../../modules/auth/interface/routes/v1/auth.routes";
+import categoryRoutes from "../../../modules/category/interface/routes/v1/category.routes";
+import authorRoutes from "../../../modules/author/interface/routes/v1/author.routes";
+
+const rootRouter = Router();
+
+// --- System & Infrastructure Routes ---
+
+rootRouter.get("/health", (req, res) => {
+  res.json({ status: "ok", version: "v1" });
+});
+
+rootRouter.get("/test-r2", async (req, res) => {
+  try {
+    const testContent = Buffer.from("Hello Cloudflare R2! Test upload.");
+    const fileName = `test-${Date.now()}.txt`;
+    const url = await uploadFileToR2(testContent, fileName, "text/plain");
+    res.json({ success: true, url });
+  } catch (error) {
+    res.status(500).json({ success: false, error: (error as Error).message });
+  }
+});
+
+// --- Domain Modules (Add these as you build them) ---
+rootRouter.use("/auth", authRoutes);
+rootRouter.use("/categories", categoryRoutes);
+rootRouter.use("/authors", authorRoutes);
+// rootRouter.use("/products", productRoutes);
+
+export default rootRouter;

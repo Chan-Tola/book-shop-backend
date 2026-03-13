@@ -1,0 +1,25 @@
+{
+  "entryFile": "src/server.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "src/modules/**/interface/controllers/v1/*Controller.ts"
+  ],
+  "spec": {
+    "outputDirectory": "src",
+    "specVersion": 3,
+    "specFile": "openapi-spec.json",
+    "yaml": true,
+    "securityDefinitions": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "src",
+    "middleware": "express",
+    "middlewareTemplate": "tsoa-routes-template.hbs"
+  }
+}
