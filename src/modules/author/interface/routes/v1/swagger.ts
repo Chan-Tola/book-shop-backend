@@ -109,3 +109,19 @@ export const authorSwaggerDocs = {
     },
   },
 };
+
+// --- SCHEMA DEFINITION FOR COMPONENTS ---
+export const authorSchema = {
+  Author: {
+    type: "object",
+    properties: {
+      _id: { type: "string", example: "65f2a1b2c3d4e5f6g7h8i9j0" },
+      name: { type: "string", example: "Robert C. Martin" },
+      biography: { type: "string", example: "Author of Clean Code" },
+      photo: { type: "string", example: "https://link-to-photo.com" },
+      website: { type: "string", example: "https://cleancoder.com" },
+      createdAt: { type: "string", format: "date-time" },
+      updatedAt: { type: "string", format: "date-time" },
+    },
+  },
+};

@@ -1,6 +1,16 @@
 import { authSwaggerDocs } from "../../../modules/auth/interface/routes/v1/swagger";
-import { authorSwaggerDocs } from "../../../modules/author/interface/routes/v1/swagger";
-import { categorySwaggerDocs } from "../../../modules/category/interface/routes/v1/swagger";
+import {
+  authorSwaggerDocs,
+  authorSchema,
+} from "../../../modules/author/interface/routes/v1/swagger";
+import {
+  categorySwaggerDocs,
+  categorySchema,
+} from "../../../modules/category/interface/routes/v1/swagger";
+import {
+  bookSwaggerDocs,
+  bookSchema,
+} from "../../../modules/book/interface/routes/v1/swagger";
 
 const baseSpec = {
   openapi: "3.0.0",
@@ -11,35 +21,22 @@ const baseSpec = {
   },
   servers: [{ url: "http://localhost:3000/api/v1" }],
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
     schemas: {
       // Category schema
-      Category: {
-        type: "object",
-        properties: {
-          _id: { type: "string", example: "64f1c2a9b2c1f5a8e9d12345" },
-          name: { type: "string", example: "Fiction" },
-          description: {
-            type: "string",
-            example: "Imaginary stories and novels",
-          },
-          slug: { type: "string", example: "fiction" },
-          isActive: { type: "boolean", example: true },
-        },
-      },
+      ...categorySchema,
 
       // Author schema
-      Author: {
-        type: "object",
-        properties: {
-          _id: { type: "string", example: "65f2a1b2c3d4e5f6g7h8i9j0" },
-          name: { type: "string", example: "Robert C. Martin" },
-          biography: { type: "string", example: "Author of Clean Code" },
-          photo: { type: "string", example: "https://link-to-photo.com" },
-          website: { type: "string", example: "https://cleancoder.com" },
-          createdAt: { type: "string", format: "date-time" },
-          updatedAt: { type: "string", format: "date-time" },
-        },
-      },
+      ...authorSchema,
+
+      // Book schema
+      ...bookSchema,
     },
   },
   paths: {} as Record<string, any>,
@@ -50,7 +47,13 @@ const mergeSwaggerDocs = () => {
   const paths = { ...baseSpec.paths };
 
   // Import and merge auth module docs
-  Object.assign(paths, authSwaggerDocs, categorySwaggerDocs, authorSwaggerDocs);
+  Object.assign(
+    paths,
+    authSwaggerDocs,
+    categorySwaggerDocs,
+    authorSwaggerDocs,
+    bookSwaggerDocs,
+  );
 
   return {
     ...baseSpec,

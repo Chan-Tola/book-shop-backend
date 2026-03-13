@@ -97,3 +97,19 @@ export const categorySwaggerDocs = {
     },
   },
 };
+
+export const categorySchema = {
+  Category: {
+    type: "object",
+    properties: {
+      _id: { type: "string", example: "64f1c2a9b2c1f5a8e9d12345" },
+      name: { type: "string", example: "Fiction" },
+      description: {
+        type: "string",
+        example: "Imaginary stories and novels",
+      },
+      slug: { type: "string", example: "fiction" },
+      isActive: { type: "boolean", example: true },
+    },
+  },
+};
