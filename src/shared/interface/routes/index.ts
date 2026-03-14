@@ -4,6 +4,7 @@ import authRoutes from "../../../modules/auth/interface/routes/v1/auth.routes";
 import categoryRoutes from "../../../modules/category/interface/routes/v1/category.routes";
 import authorRoutes from "../../../modules/author/interface/routes/v1/author.routes";
 import bookRoutes from "../../../modules/book/interface/routes/v1/book.routes";
+import cartRoutes from "../../../modules/cart/interface/routes/v1/cart.routes";
 
 const rootRouter = Router();
 
@@ -29,6 +30,7 @@ rootRouter.use("/auth", authRoutes);
 rootRouter.use("/categories", categoryRoutes);
 rootRouter.use("/authors", authorRoutes);
 rootRouter.use("/books", bookRoutes);
+rootRouter.use("/carts", cartRoutes);
 // rootRouter.use("/products", productRoutes);
 
 export default rootRouter;

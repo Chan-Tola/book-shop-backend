@@ -11,6 +11,10 @@ import {
   bookSwaggerDocs,
   bookSchema,
 } from "../../../modules/book/interface/routes/v1/swagger";
+import {
+  cartSwaggerDocs,
+  cartSchema,
+} from "../../../modules/cart/interface/routes/v1/swagger";
 
 const baseSpec = {
   openapi: "3.0.0",
@@ -37,6 +41,9 @@ const baseSpec = {
 
       // Book schema
       ...bookSchema,
+
+      // Cart schema
+      ...cartSchema,
     },
   },
   paths: {} as Record<string, any>,
@@ -53,6 +60,7 @@ const mergeSwaggerDocs = () => {
     categorySwaggerDocs,
     authorSwaggerDocs,
     bookSwaggerDocs,
+    cartSwaggerDocs,
   );
 
   return {
