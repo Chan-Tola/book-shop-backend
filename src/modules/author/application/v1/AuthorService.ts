@@ -37,6 +37,6 @@ export class DeleteAuthor {
   async execute(id: string) {
     const author = await AuthorModel.findByIdAndDelete(id);
     if (!author) throw new Error("Author not found");
-    return { message: "Author deleted successfully" };
+    return author;
   }
 }

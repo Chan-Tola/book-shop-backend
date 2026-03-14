@@ -25,7 +25,7 @@ export const authorSwaggerDocs = {
       requestBody: {
         required: true,
         content: {
-          "application/json": {
+          "multipart/form-data": {
             schema: {
               type: "object",
               required: ["name"],
@@ -37,8 +37,7 @@ export const authorSwaggerDocs = {
                 },
                 photo: {
                   type: "string",
-                  example:
-                    "https://upload.wikimedia.org/wikipedia/commons/e/ee/Robert_Cecil_Martin.png",
+                  format: "binary",
                 },
                 website: {
                   type: "string",
@@ -77,13 +76,13 @@ export const authorSwaggerDocs = {
       ],
       requestBody: {
         content: {
-          "application/json": {
+          "multipart/form-data": {
             schema: {
               type: "object",
               properties: {
                 name: { type: "string" },
                 biography: { type: "string" },
-                photo: { type: "string" },
+                photo: { type: "string", format: "binary" },
                 website: { type: "string" },
               },
             },

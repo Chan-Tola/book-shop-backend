@@ -6,6 +6,10 @@ import {
   UpdateAuthor,
   DeleteAuthor,
 } from "../../../application/v1/AuthorService";
+import {
+  uploadFileToR2,
+  deleteFileFromR2ByUrl,
+} from "../../../../../shared/infrastructure/services/R2StorageService";
 
 export class AuthorController {
   private getAllUC = new GetAllAuthors();
@@ -43,7 +47,20 @@ export class AuthorController {
   // CREATE
   create = async (req: Request, res: Response) => {
     try {
-      const author = await this.createUC.execute(req.body);
+      const file = req.file as Express.Multer.File | undefined;
+      const payload = { ...req.body } as Record<string, unknown>;
+
+      if (file) {
+        const safeName = file.originalname.replace(/\s+/g, "-");
+        const fileName = `authors/${Date.now()}-${safeName}`;
+        payload.photo = await uploadFileToR2(
+          file.buffer,
+          fileName,
+          file.mimetype,
+        );
+      }
+
+      const author = await this.createUC.execute(payload);
       res.status(201).json({ success: true, data: author });
     } catch (error) {
       res.status(400).json({ success: false, error: (error as Error).message });
@@ -59,7 +76,33 @@ export class AuthorController {
           .status(400)
           .json({ success: false, error: "Invalid author id" });
       }
-      const result = await this.updateUC.execute(id, req.body);
+      const file = req.file as Express.Multer.File | undefined;
+      const payload = { ...req.body } as Record<string, unknown>;
+
+      for (const key of Object.keys(payload)) {
+        if (payload[key] === "") delete payload[key];
+      }
+
+      if (file) {
+        const existingAuthor = await this.getOneUC.execute(id);
+        const safeName = file.originalname.replace(/\s+/g, "-");
+        const fileName = `authors/${Date.now()}-${safeName}`;
+        payload.photo = await uploadFileToR2(
+          file.buffer,
+          fileName,
+          file.mimetype,
+        );
+
+        if (
+          existingAuthor.photo &&
+          typeof existingAuthor.photo === "string" &&
+          existingAuthor.photo.includes("r2.dev")
+        ) {
+          await deleteFileFromR2ByUrl(existingAuthor.photo);
+        }
+      }
+
+      const result = await this.updateUC.execute(id, payload);
       res.status(200).json({ success: true, data: result });
     } catch (error) {
       res.status(400).json({ success: false, error: (error as Error).message });
@@ -75,7 +118,14 @@ export class AuthorController {
           .status(400)
           .json({ success: false, error: "Invalid author id" });
       }
-      await this.deleteUC.execute(id);
+      const author = await this.deleteUC.execute(id);
+      if (
+        author.photo &&
+        typeof author.photo === "string" &&
+        author.photo.includes("r2.dev")
+      ) {
+        await deleteFileFromR2ByUrl(author.photo);
+      }
       res
         .status(200)
         .json({ success: true, message: "Author deleted successfully" });
