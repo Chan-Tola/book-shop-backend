@@ -92,6 +92,6 @@ function recalcTotals(cart: any) {
     (sum: number, i: any) => sum + i.priceAtAddition * i.quantity,
     0,
   );
-  cart.tax = cart.subTotal * 0.1; // 10% example
-  cart.totalPrice = Number((cart.subTotal + cart.tax).toFixed(2));
+  cart.tax = 0;
+  cart.totalPrice = Number(cart.subTotal.toFixed(2));
 }

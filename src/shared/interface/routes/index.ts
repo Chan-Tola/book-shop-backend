@@ -5,6 +5,8 @@ import categoryRoutes from "../../../modules/category/interface/routes/v1/catego
 import authorRoutes from "../../../modules/author/interface/routes/v1/author.routes";
 import bookRoutes from "../../../modules/book/interface/routes/v1/book.routes";
 import cartRoutes from "../../../modules/cart/interface/routes/v1/cart.routes";
+import orderRoutes from "../../../modules/orders/interface/routes/v1/order.routes";
+import paymentRoutes from "../../../modules/payment/interface/routes/v1/payment.routes";
 
 const rootRouter = Router();
 
@@ -31,6 +33,7 @@ rootRouter.use("/categories", categoryRoutes);
 rootRouter.use("/authors", authorRoutes);
 rootRouter.use("/books", bookRoutes);
 rootRouter.use("/carts", cartRoutes);
-// rootRouter.use("/products", productRoutes);
+rootRouter.use("/orders", orderRoutes);
+rootRouter.use("/payments", paymentRoutes);
 
 export default rootRouter;
