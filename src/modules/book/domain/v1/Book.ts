@@ -27,4 +27,11 @@ const bookSchema = new Schema<IBook>(
   { timestamps: true },
 );
 
+// Indexes for fast filtering
+bookSchema.index({ author: 1 });
+bookSchema.index({ category: 1 });
+bookSchema.index({ author: 1, category: 1 });
+// Text index for title search
+bookSchema.index({ title: "text" });
+
 export const BookModel = model<IBook>("Book", bookSchema);

@@ -1,8 +1,60 @@
+import { Types } from "mongoose";
+import { AuthorModel } from "../../../author/domain/v1/Author";
+import { CategoryModel } from "../../../category/domain/v1/Category";
 import { BookModel, IBook } from "../../domain/v1/Book";
 
+type BookFilters = {
+  title?: string;
+  author?: string;
+  category?: string;
+};
+
+const escapeRegex = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 export class GetAllBooks {
-  async execute() {
-    return await BookModel.find().populate("author category");
+  async execute(filters: BookFilters = {}) {
+    const query: Record<string, unknown> = {};
+
+    if (filters.title) {
+      query.title = {
+        $regex: escapeRegex(filters.title),
+        $options: "i",
+      };
+    }
+
+    if (filters.author) {
+      if (Types.ObjectId.isValid(filters.author)) {
+        query.author = filters.author;
+      } else {
+        const authors = await AuthorModel.find(
+          { name: { $regex: escapeRegex(filters.author), $options: "i" } },
+          { _id: 1 },
+        );
+        if (authors.length === 0) return [];
+        query.author = { $in: authors.map((author) => author._id) };
+      }
+    }
+
+    if (filters.category) {
+      if (Types.ObjectId.isValid(filters.category)) {
+        query.category = filters.category;
+      } else {
+        const categories = await CategoryModel.find(
+          {
+            $or: [
+              { name: { $regex: escapeRegex(filters.category), $options: "i" } },
+              { slug: { $regex: escapeRegex(filters.category), $options: "i" } },
+            ],
+          },
+          { _id: 1 },
+        );
+        if (categories.length === 0) return [];
+        query.category = { $in: categories.map((category) => category._id) };
+      }
+    }
+
+    return await BookModel.find(query).populate("author category");
   }
 }
 

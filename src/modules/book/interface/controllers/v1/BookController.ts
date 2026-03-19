@@ -18,9 +18,16 @@ export class BookController {
   private updateUC = new UpdateBook();
   private deleteUC = new DeleteBook();
 
-  getAll = async (_req: Request, res: Response) => {
+  getAll = async (req: Request, res: Response) => {
     try {
-      const books = await this.getAllUC.execute();
+      const { title, author, category } = req.query;
+      const filters = {
+        title: typeof title === "string" ? title : undefined,
+        author: typeof author === "string" ? author : undefined,
+        category: typeof category === "string" ? category : undefined,
+      };
+
+      const books = await this.getAllUC.execute(filters);
       res.status(200).json({ success: true, data: books });
     } catch (error) {
       res.status(500).json({ success: false, error: (error as Error).message });

@@ -21,4 +21,7 @@ const authorSchema = new Schema<IAuthor>(
   { timestamps: true },
 );
 
+// Index for name lookup
+authorSchema.index({ name: 1 });
+
 export const AuthorModel = model<IAuthor>("Author", authorSchema);
