@@ -3,11 +3,12 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { specs } from "./shared/infrastructure/config/swagger";
 import rootRouter from "./shared/interface/routes";
+import { corsConfig } from "./shared/infrastructure/config/cors.config";
 
 const app: Application = express();
 
 // 1. Standard Middleware
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(express.json());
 
 // 2. Documentation (Independent of API versioning)
