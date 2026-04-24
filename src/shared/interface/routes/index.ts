@@ -7,6 +7,7 @@ import bookRoutes from "../../../modules/book/interface/routes/v1/book.routes";
 import cartRoutes from "../../../modules/cart/interface/routes/v1/cart.routes";
 import orderRoutes from "../../../modules/orders/interface/routes/v1/order.routes";
 import paymentRoutes from "../../../modules/payment/interface/routes/v1/payment.routes";
+import customerRoutes from "../../../modules/customer/interface/routes/v1/customer.routes";
 
 const rootRouter = Router();
 
@@ -35,5 +36,6 @@ rootRouter.use("/books", bookRoutes);
 rootRouter.use("/carts", cartRoutes);
 rootRouter.use("/orders", orderRoutes);
 rootRouter.use("/payments", paymentRoutes);
+rootRouter.use("/customers", customerRoutes);
 
 export default rootRouter;
