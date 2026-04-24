@@ -186,7 +186,12 @@ export class OrderController {
       }
 
       const statusValue = status as OrderStatus;
-      const validStatuses = ["pending", "processing", "cancelled"] as const;
+      const validStatuses = [
+        "pending",
+        "processing",
+        "cancelled",
+        "completed",
+      ] as const;
       if (!validStatuses.includes(statusValue)) {
         return res.status(400).json({
           success: false,

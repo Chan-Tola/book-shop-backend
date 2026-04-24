@@ -192,8 +192,9 @@ export class UpdateOrderStatus {
     // Validate status transitions
     const validTransitions: Record<OrderStatus, OrderStatus[]> = {
       pending: ["processing", "cancelled"],
-      processing: ["cancelled"],
+      processing: ["completed", "cancelled"],
       cancelled: [],
+      completed: [],
     };
 
     if (!validTransitions[order.status].includes(status)) {
